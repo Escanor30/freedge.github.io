@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Bon appétit! - Freedge</title>
+
+  <style>
+    body {
+      margin: 0;
+      font-family: "Inter", sans-serif;
+      background-color: #F4E48A; /* camomile yellow */
+      color: #1A2A2F;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+
+    /* ---------- HEADER ---------- */
+    header {
+      background: white;
+      width: 100%;
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      padding: 0.5rem 1rem;
+      box-sizing: border-box;
+      position: relative;
+    }
+
+    /* Small Freedge logo inside header (left corner) */
+    .logo-button {
+      position: absolute;
+      left: 1rem;
+      display: flex;
+      align-items: center;
+      text-decoration: none;
+    }
+
+    .logo-button img {
+      width: 50px;
+      height: auto;
+      display: block;
+      border-radius: 6px;
+    }
+
+    header button {
+      background: #457b57;
+      border: none;
+      color: white;
+      padding: 0.4rem 0.9rem;
+      border-radius: 10px;
+      margin-left: 0.5rem;
+      cursor: pointer;
+      font-weight: 600;
+      transition: 0.2s;
+    }
+
+    header button:hover {
+      background-color: #356b47;
+    }
+
+    /* ---------- THANK YOU SECTION ---------- */
+    .thankyou-section {
+      background-color: #F4E48A;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 3rem 1rem;
+      min-height: 85vh;
+      width: 100%;
+      box-sizing: border-box;
+    }
+
+    .thankyou-section img {
+      width: 180px;
+      height: auto;
+      margin-bottom: 1.5rem;
+    }
+
+    .thankyou-section p {
+      font-size: 1.1rem;
+      font-style: italic;
+      margin-bottom: 2rem;
+    }
+
+    /* ---------- BUTTONS ---------- */
+    .btn {
+      display: block;
+      width: 200px;
+      padding: 0.8rem;
+      border-radius: 10px;
+      font-weight: 600;
+      margin: 0.5rem auto;
+      cursor: pointer;
+      transition: 0.3s;
+      font-size: 0.95rem;
+    }
+
+    .btn-outline {
+      background-color: transparent;
+      border: 2px solid #457b57;
+      color: #457b57;
+    }
+
+    .btn-outline:hover {
+      background-color: #e8e8d9;
+    }
+
+    .btn-green {
+      background-color: #457b57;
+      color: white;
+      border: none;
+    }
+
+    .btn-green:hover {
+      background-color: #356b47;
+    }
+
+    /* ---------- FOOTER ---------- */
+    footer {
+      width: 100%;
+      background: white;
+      padding: 1rem 0.5rem;
+      font-size: 0.8rem;
+      text-align: center;
+      color: #1A2A2F;
+      box-sizing: border-box;
+    }
+
+    footer strong {
+      display: block;
+      margin-bottom: 0.3rem;
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <!-- ✅ Freedge Logo in Corner -->
+    <a href="index.html" class="logo-button">
+      <img src="images/freedge_logo.png" alt="Freedge Home">
+    </a>
+
+    <!-- Browse & Donate buttons -->
+    <button onclick="window.location.href='fridges.html'">Browse</button>
+    <button onclick="window.location.href='donate.html'">Donate</button>
+  </header>
+
+  <!-- ✅ Thank You Section -->
+  <section class="thankyou-section">
+    <img src="images/bonappetit.png" alt="Bonappetit logo" class="thankyou-hero" />
+    <p>Thank you for reducing waste today</p>
+
+    <button class="btn btn-outline" onclick="window.location.href='fridge.html'">
+      Back to freedge
+    </button>
+
+    <button class="btn btn-green" onclick="window.location.href='index.html'">
+      Back to homepage
+    </button>
+  </section>
+
+  <!-- ✅ Footer -->
+  <footer>
+    <strong>FREEDGE</strong>
+    SUÐURLANDSBRAUT 25<br />
+    FREEDGE@FREEDGE.IS
+  </footer>
+</body>
+</html>

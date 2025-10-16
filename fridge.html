@@ -1,0 +1,274 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <title>Freedge — Fridge</title>
+  <meta charset="utf-8" />
+  <meta http-equiv="Content-Language" content="en">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#F3D86E">
+  <link rel="icon" href="images/logo.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Domine:wght@600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css" />
+  <style>
+    /* Lightweight, complements styles.css */
+    .hero { background:#F3D86E; border-radius:1rem; padding:1rem; display:grid; gap:.5rem; margin:1rem 0 }
+    .hero h2 { font-family: "Domine", serif; margin:0; font-size:1.75rem }
+    .status { font-weight:600; background:#0a7d48; color:#fff; padding:.25rem .6rem; border-radius:999px; font-size:.85rem; display:inline-block }
+    .meta { color:#2d2d2d; opacity:.85; font-size:.95rem }
+    .stat { background:#1b5e20; color:#fff; border-radius:.75rem; padding:1rem; text-align:center; font-weight:800 }
+    .cards { display:grid; gap:1rem; }
+    .food-card { background:#fff; border-radius:1rem; box-shadow:0 1px 0 rgba(0,0,0,.06), 0 8px 24px rgba(0,0,0,.06); padding:1rem; display:grid; grid-template-columns:110px 1fr; gap:1rem; }
+    .food-card img { width:110px; height:110px; object-fit:cover; border-radius:.75rem; }
+    .food-card h3 { margin:.1rem 0 .25rem; font-size:1.05rem }
+    .pill { display:inline-flex; align-items:center; gap:.35rem; font-size:.8rem; padding:.25rem .5rem; border-radius:.6rem; background:#eef7ee; color:#0a7d48; margin-right:.35rem }
+    .dates { font-size:.8rem; color:#555; margin:.25rem 0 .4rem }
+    .actions { display:flex; align-items:center; gap:.5rem; flex-wrap:wrap }
+    .qty { display:inline-flex; align-items:center; border:1px solid #dadada; border-radius:.6rem; overflow:hidden }
+    .qty button { background:#f5f5f5; border:0; width:34px; height:34px; font-weight:700; cursor:pointer }
+    .qty input { width:42px; text-align:center; border:0; height:34px; outline:none }
+    .btn-ghost { background:#fff; border:1px solid #0a7d48; color:#0a7d48; border-radius:.6rem; padding:.5rem .75rem; font-weight:600; cursor:pointer }
+    .topbar { display:flex; align-items:center; justify-content:space-between; gap:1rem; margin-top:1rem }
+    .crumbs { font-size:.9rem }
+    .crumbs a { color:#0a7d48; text-decoration:none }
+    @media (max-width:640px){
+      .food-card { grid-template-columns:1fr; }
+      .food-card img { width:100%; height:180px; }
+    }
+  </style>
+</head>
+<body>
+
+<header class="site-header" role="banner">
+  <div class="container header-inner">
+    <a class="brand" href="index.html">
+      <img class="logo" src="images/freedge_logo.png" alt="Freedge logo">
+      <span class="brand-name">Freedge</span>
+    </a>
+    <nav class="nav" aria-label="Primary">
+      <a href="index.html">Home</a>
+      <a href="fridges.html">Browse</a>
+      <a href="donate.html">Donate</a>
+    </nav>
+    <div class="lang">
+      <label for="lang" class="sr">Choose language</label>
+      <select id="lang" aria-label="Language">
+        <option value="en" selected>English</option>
+        <option value="is">Íslenska</option>
+        <option value="pl">Polski</option>
+      </select>
+    </div>
+  </div>
+</header>
+
+<section class="slate">
+  <div class="container">
+
+    <div class="topbar">
+      <div class="crumbs"><a href="fridges.html">Browse</a> · <span id="crumbName">Fridge</span></div>
+      <a class="btn" href="fridges.html" style="text-decoration:none">← Back</a>
+    </div>
+
+    <div class="hero">
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:1rem">
+        <div>
+          <h2 id="fridgeName">Fridge</h2>
+          <div class="meta">
+            <span id="fridgeLocation">City</span>
+            &nbsp;•&nbsp;<span id="fridgeDistance">—</span>
+          </div>
+        </div>
+        <span id="fridgeStatus" class="status">Open</span>
+      </div>
+      <div class="stat" id="fridgeStat">128kg Food saved in 2025</div>
+    </div>
+
+    <h3 style="margin:1rem 0 .5rem">Food listings</h3>
+    <div class="cards" id="cards"></div>
+
+  </div>
+</section>
+
+<footer class="site-footer">
+  <div class="container footer-inner">
+    <div>FREEDGE<br><small>Suðurlandsbraut 25</small></div>
+    <div class="copy">© 2025 Freedge</div>
+  </div>
+  <section class="quote">
+    <div class="container">
+      <blockquote>
+        <p>“Those who share their food share their future — the biggest hearts light the brightest path.”</p>
+      </blockquote>
+    </div>
+  </section>
+</footer>
+
+<script>
+  // --- No-Cyrillic sanitizer for any dynamic copy ---
+  const stripCyr = (s='') => s.replace(/[\u0400-\u052F\u2DE0-\u2DFF\uA640-\uA69F]/g, '');
+
+  // --- Demo data; swap for your API as needed ---
+  const FRIDGES = {
+    smarinn: {
+      id: 'smarinn',
+      name: 'Smárinn Freedge',
+      location: 'Kópavogur',
+      distance: '3.0 km',
+      status: 'Open',
+      saved: 128,
+      items: [
+        {
+          id:'it1',
+          title:'Cakes',
+          posted:'15/10/25',
+          expiry:'31/10/25',
+          fridge:'Smárinn Freedge',
+          qty: 6,
+          img:'images/cakes.jpg.png',
+          desc:'Selection of 2–3 day old cakes from local bakery. Contains gluten and dairy.'
+        },
+        {
+          id:'it2',
+          title:'Bread loaves',
+          posted:'15/10/25',
+          expiry:'31/10/25',
+          fridge:'Smárinn Freedge',
+          qty: 5,
+          img:'images/bread loaves.jpg.png',
+          desc:'Uncut loaves and rolls. Great for toast or croutons.'
+        },
+        {
+          id:'it3',
+          title:'Rana Lasagne',
+          posted:'15/10/25',
+          expiry:'31/10/25',
+          fridge:'Smárinn Freedge',
+          qty: 3,
+          img:'images/Rana lasagne.jpg.png',
+          desc:'Family-size frozen lasagne; keep frozen until use.'
+        }
+      ]
+    },
+    blom: {
+    id: 'blom',
+    name: 'Blómaskeið Freedge',
+    location: 'Reykjavík',
+    distance: '2.6 km',
+    status: 'Open',
+    saved: 92,
+    items: []
+  },
+  sport: {
+    id: 'sport',
+    name: 'Sveitarport Hall',
+    location: 'Reykjavík',
+    distance: '4.0 km',
+    status: 'Open',
+    saved: 64, 
+    items: []
+  }
+};
+     
+  // --- Page boot ---
+  (function init(){
+    const params = new URLSearchParams(location.search);
+    const id = params.get('id') || 'smarinn';
+    const data = FRIDGES[id] || FRIDGES.smarinn;
+
+    // Header bits
+    document.getElementById('fridgeName').textContent = stripCyr(data.name);
+    document.getElementById('crumbName').textContent = stripCyr(data.name);
+    document.getElementById('fridgeLocation').textContent = stripCyr(data.location);
+    document.getElementById('fridgeDistance').textContent = stripCyr(data.distance);
+    document.getElementById('fridgeStatus').textContent = stripCyr(data.status);
+    document.getElementById('fridgeStatus').style.background = data.status === 'Open' ? '#0a7d48' : '#9d1c1c';
+    document.getElementById('fridgeStat').textContent = `${data.saved}kg Food saved in 2025`;
+
+    // Cards
+    const host = document.getElementById('cards');
+    host.innerHTML = '';
+    if (!data.items.length){
+      host.innerHTML = '<p>No listings right now. Check back soon.</p>';
+      return;
+    }
+
+    data.items.forEach(item => {
+      const card = document.createElement('article');
+      card.className = 'food-card';
+
+      const img = document.createElement('img');
+      img.loading = 'lazy';
+      img.alt = stripCyr(item.title);
+      img.src = item.img || 'images/items/placeholder.jpg';
+
+      const body = document.createElement('div');
+
+      const h3 = document.createElement('h3');
+      h3.textContent = stripCyr(item.title);
+
+      const dates = document.createElement('div');
+      dates.className = 'dates';
+      dates.textContent = `Posted ${stripCyr(item.posted)} • Exp. ${stripCyr(item.expiry)}`;
+
+      const tags = document.createElement('div');
+      tags.innerHTML = `<span class="pill"> ${stripCyr(item.fridge)} </span>`;
+
+      const desc = document.createElement('p');
+      desc.style.margin = '.4rem 0 .6rem';
+      desc.textContent = stripCyr(item.desc);
+
+      const actions = document.createElement('div');
+      actions.className = 'actions';
+
+      // qty stepper
+      const qty = document.createElement('div');
+      qty.className = 'qty';
+      const minus = document.createElement('button'); minus.type='button'; minus.textContent = '−';
+      const qinput = document.createElement('input'); qinput.type='text'; qinput.value='1'; qinput.inputMode='numeric';
+      const plus = document.createElement('button'); plus.type='button'; plus.textContent = '+';
+      qty.append(minus, qinput, plus);
+
+      const take = document.createElement('button');
+      take.type='button';
+      take.className='btn-ghost';
+      take.textContent='Mark as taken';
+
+      // behaviors
+      const clamp = (n) => Math.max(1, Math.min(n, item.qty));
+      const sanitizeDigits = (s) => (s||'').replace(/\D/g,'').slice(0,3);
+      plus.addEventListener('click', () => { qinput.value = clamp((+qinput.value||1)+1); });
+      minus.addEventListener('click', () => { qinput.value = clamp((+qinput.value||1)-1); });
+      qinput.addEventListener('input', () => { qinput.value = clamp(+sanitizeDigits(qinput.value)||1); });
+
+      take.addEventListener('click', () => {
+  const n = clamp(+qinput.value || 1);
+  if (n > item.qty) { 
+    // keep this guard if you like; remove alert if you hate popups
+    alert('Not enough quantity left.');
+    return;
+  }
+
+  // (optional) update local count before leaving
+  item.qty -= n;
+
+  // current fridge id from the URL
+  const params   = new URLSearchParams(location.search);
+  const fridgeId = params.get('id') || 'smarinn';
+
+  // redirect to confirmation page
+  const url = `taken.html?fridge=${encodeURIComponent(fridgeId)}&item=${encodeURIComponent(item.title)}&qty=${n}`;
+  window.location.href = url;
+});
+
+      actions.append(qty, take);
+
+      body.append(h3, dates, tags, desc, actions);
+      card.append(img, body);
+      host.append(card);
+    });
+  })();
+</script>
+
+</body>
+</html>

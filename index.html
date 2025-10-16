@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <title>Freedge — start</title>
+  
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#F3D86E">
+  <link rel="icon" href="images/logo.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Domine:wght@600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css" />
+
+</head>
+<body>
+
+<header class="site-header" role="banner">
+  <div class="container header-inner">
+    <a class="brand" href="index.html">
+      <img class="logo" src="images/freedge_logo.png" alt="Freedge logo">
+      <span class="brand-name" data-i18n="brand">Freedge</span>
+    </a>
+    <nav class="nav" aria-label="Primary">
+      <a href="index.html" data-i18n="nav_home">Home</a>
+      <a href="fridges.html" data-i18n="nav_browse">Browse</a>
+      <a href="donate.html" data-i18n="nav_donate">Donate</a>
+    </nav>
+    <div class="lang">
+      <label for="lang" class="sr" data-i18n="choose_lang_label">Choose language</label>
+      <select id="lang" aria-label="Language">
+        <option value="en">English</option>
+        <option value="is">Íslenska</option>
+        <option value="pl">Polski</option>
+      </select>
+    </div>
+  </div>
+</header>
+
+    <!-- Right-hand card with your logo -->
+    <figure class="fx-hero__card" aria-label="Frískapur logo">
+      <img src="images/freedge_logo.png" alt="Frískapur emblem" />
+    </figure>
+  </div>
+</section>
+<!-- HOW IT WORKS SECTION -->
+<section class="how">
+  <div class="wrap narrow">
+    <h2 class="section-title">How it works?</h2>
+    </p>
+
+    <div class="browse-section">
+        <p>
+          Take a look at today’s fridge treasures — no scavenger hunt required.
+          Spot a treat? Dash and snag it like a snack ninja.
+        </p>
+        <a class="btn btn--green" href="fridges.html" role="button">Browse</a>
+      </div>
+
+      <div class="donate-section">
+        <p>
+          Turn leftovers into love letters to your neighborhood. Seal with a snap & visible exp date.
+        </p>
+        <a class="btn btn--outline" href="donate.html" role="button">Donate</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<section class="fx-stats">
+  <div class="container fx-stats__row">
+    <div class="fx-stat"><span id="s-fridges" class="fx-stat__num">3</span> <span>Active fridges</span></div>
+    <div class="fx-stat"><span id="s-pledges" class="fx-stat__num">3</span> <span>Pledges this week</span></div>
+  </div>
+</section>
+
+
+<!-- Map (yellow section) -->
+<section class="map-yellow">
+  <div class="wrap narrow">
+    <h2 class="section-title">Map</h2>
+    <p class="map-sub">
+      Select a fridge to see what’s inside, then head over while it’s fresh.
+    </p>
+
+    <div class="map-card">
+      <div class="map-frame">
+        <iframe
+          title="Fridges map"
+          src="https://www.openstreetmap.org/export/embed.html?bbox=-22.0%2C64.05%2C-21.6%2C64.2&layer=mapnik&marker=64.126%2C-21.817">
+        </iframe>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="site-footer">
+  <div class="container footer-inner">
+    <div>FREEDGE<br><small>Suðurlandsbraut 25</small></div>
+    <div class="copy">© 2025 Freedge</div>
+  </div>
+  <section class="quote">
+    <div class="container">
+      <blockquote>
+        <p data-i18n="quote">“Those who share their food share their future — the biggest hearts light the brightest path.”</p>
+      </blockquote>
+    </div>
+  </section>
+  <script src="js/i18n.js"></script>
+  <script src="js/app.js"></script>
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,223 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <title>Freedge — Donate</title>
+  <meta charset="utf-8" />
+  <meta http-equiv="Content-Language" content="en">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#F3D86E">
+  <link rel="icon" href="images/logo.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Domine:wght@600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css" />
+  <style>
+    /* Small inline helpers so this works even if styles.css isn't updated */
+    .note { font-size:.85rem; color:#666; margin-top:.25rem }
+    .hidden { display:none }
+    .error { color:#b00020 }
+    .file-uploader{display:flex;align-items:center;gap:.75rem;flex-wrap:wrap}
+    .file-native{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
+    .file-name{font-size:.9rem;color:#666}
+  </style>
+</head>
+<body>
+
+<header class="site-header" role="banner">
+  <div class="container header-inner">
+    <a class="brand" href="index.html">
+      <img class="logo" src="images/freedge_logo.png" alt="Freedge logo">
+      <span class="brand-name" data-i18n="brand">Freedge</span>
+    </a>
+    <nav class="nav" aria-label="Primary">
+      <a href="index.html" data-i18n="nav_home">Home</a>
+      <a href="fridges.html" data-i18n="nav_browse">Browse</a>
+      <a href="donate.html" data-i18n="nav_donate" aria-current="page">Donate</a>
+    </nav>
+    <div class="lang">
+      <label for="lang" class="sr" data-i18n="choose_lang_label">Choose language</label>
+      <select id="lang" aria-label="Language">
+        <option value="en" selected>English</option>
+        <option value="is">Íslenska</option>
+        <option value="pl">Polski</option>
+      </select>
+    </div>
+  </div>
+</header>
+
+<section class="slate">
+  <div class="container">
+    <h1 style="padding:1rem 0 .5rem" data-i18n="donate_title">Donate Food</h1>
+
+    <form class="card form" id="donForm" novalidate autocomplete="off" spellcheck="false">
+      <div class="row">
+        <label for="d-what" data-i18n="f_what_label">What are you donating?</label>
+        <input id="d-what" required data-i18n-placeholder="f_what_ph" placeholder="e.g., 6 apples" inputmode="text" aria-describedby="latinNote1">
+        <small id="latinNote1" class="note hidden">Latin letters and numbers only.</small>
+      </div>
+
+      <div class="row">
+        <label for="d-qty" data-i18n="f_qty_label">Amount or servings</label>
+        <input id="d-qty" required data-i18n-placeholder="f_qty_ph" placeholder="e.g., 2 bags" inputmode="text" aria-describedby="latinNote2">
+        <small id="latinNote2" class="note hidden">Latin letters and numbers only.</small>
+      </div>
+
+      <div class="row">
+        <label for="d-desc" data-i18n="f_desc_label">Description</label>
+        <textarea id="d-desc" rows="3" data-i18n-placeholder="f_desc_ph" placeholder="Ingredients, allergy info…" aria-describedby="latinNote3"></textarea>
+        <small id="latinNote3" class="note hidden">Latin letters and numbers only.</small>
+      </div>
+
+      <!-- Masked Latin-only date (no locale UI) -->
+      <div class="row">
+        <label for="bestby">Best-by date</label>
+        <input
+          type="text"
+          id="bestby"
+          name="bestby"
+          placeholder="DD/MM/YYYY"
+          inputmode="numeric"
+          maxlength="10"
+          aria-describedby="dateHelp"
+          pattern="^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[0-2])\/(19|20)\\d{2}$">
+        <small id="dateHelp">Format: DD/MM/YYYY</small>
+      </div>
+
+      <div class="row">
+        <label for="d-fridge" data-i18n="f_fridge_label">Fridge location</label>
+        <select id="d-fridge" aria-label="Fridge location"></select>
+      </div>
+
+      <!-- Custom file control (forces English UI) -->
+      <div class="row">
+        <label data-i18n="f_img_label">Add image (optional)</label>
+        <div class="file-uploader">
+          <input id="d-img" class="file-native" type="file" accept="image/*" aria-label="Choose image file">
+          <button type="button" id="d-img-btn" class="btn btn-secondary">Add file</button>
+          <span id="d-img-name" class="file-name">No file chosen</span>
+        </div>
+      </div>
+
+      <div class="row">
+        <output id="formError" class="error"></output>
+      </div>
+
+      <button class="btn btn-primary" type="submit" data-i18n="f_submit">Donate Food</button>
+    </form>
+  </div>
+</section>
+
+<footer class="site-footer">
+  <div class="container footer-inner">
+    <div>FREEDGE<br><small>Suðurlandsbraut 25</small></div>
+    <div class="copy">© 2025 Freedge</div>
+  </div>
+  <section class="quote">
+    <div class="container">
+      <blockquote>
+        <p data-i18n="quote">“Those who share their food share their future — the biggest hearts light the brightest path.”</p>
+      </blockquote>
+    </div>
+  </section>
+
+  <!-- Your existing bundles -->
+  <script src="js/i18n.js"></script>
+  <script src="js/app.js"></script>
+
+  <!-- Latin-only guards, date mask, custom file UI, validation -->
+  <script>
+    (function () {
+      document.documentElement.lang = 'en'; // belt-and-suspenders
+
+      // Regex for Cyrillic ranges (basic + extended)
+      const CYRILLIC_RE = /[\u0400-\u052F\u2DE0-\u2DFF\uA640-\uA69F]/g;
+
+      // Inputs to sanitize
+      const fields = [
+        { el: document.getElementById('d-what'), note: document.getElementById('latinNote1') },
+        { el: document.getElementById('d-qty'),  note: document.getElementById('latinNote2') },
+        { el: document.getElementById('d-desc'), note: document.getElementById('latinNote3') }
+      ];
+
+      // Strip Cyrillic on type & paste; show a subtle note if we scrubbed anything
+      const scrub = (el, note) => {
+        const before = el.value;
+        const after = before.replace(CYRILLIC_RE, '');
+        if (before !== after) {
+          el.value = after;
+          if (note) {
+            note.classList.remove('hidden');
+            clearTimeout(el._noteTimer);
+            el._noteTimer = setTimeout(() => note.classList.add('hidden'), 2000);
+          }
+        }
+      };
+
+      fields.forEach(({ el, note }) => {
+        ['input', 'paste'].forEach(evt => el.addEventListener(evt, () => scrub(el, note)));
+      });
+
+      // Date mask: DD/MM/YYYY (digits & slashes only, Latin digits)
+      const date = document.getElementById('bestby');
+      date.addEventListener('input', (e) => {
+        let v = e.target.value.replace(/[^\d]/g, '').slice(0, 8); // only ASCII digits
+        if (v.length >= 5) v = v.slice(0,2) + '/' + v.slice(2,4) + '/' + v.slice(4);
+        else if (v.length >= 3) v = v.slice(0,2) + '/' + v.slice(2);
+        e.target.value = v;
+      });
+      date.addEventListener('blur', () => {
+        const ok = /^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[0-2])\/(19|20)\d{2}$/.test(date.value);
+        date.setCustomValidity(ok ? '' : 'Please use DD/MM/YYYY');
+      });
+
+      // Custom file control (prevents Cyrillic native labels)
+      const input = document.getElementById('d-img');
+      const btn   = document.getElementById('d-img-btn');
+      const name  = document.getElementById('d-img-name');
+      btn.addEventListener('click', () => input.click());
+      input.addEventListener('change', () => {
+        name.textContent = (input.files && input.files[0]) ? input.files[0].name : 'No file chosen';
+      });
+
+      // Populate fridge dropdown (kept simple; adapt to your data source)
+      const fridgeSelect = document.getElementById('d-fridge');
+      const fridges = [
+        { id: 'smarinn', label: 'Smárinn Freedge' },
+        { id: 'hafnarfjordur', label: 'Hafnarfjörður Freedge' },
+        { id: 'laugardalur', label: 'Laugardalur Freedge' }
+      ];
+      fridgeSelect.innerHTML = fridges.map(f => `<option value="${f.id}">${f.label}</option>`).join('');
+
+      // Guard the form submit
+      const form = document.getElementById('donForm');
+      const formError = document.getElementById('formError');
+
+      form.addEventListener('submit', function (e) {
+        // Final scrub before validate
+        fields.forEach(({ el }) => { el.value = el.value.replace(CYRILLIC_RE, ''); });
+
+        formError.textContent = '';
+        if (!document.getElementById('d-what').value.trim()) {
+          e.preventDefault(); formError.textContent = 'Please tell us what you are donating.'; return;
+        }
+        if (!document.getElementById('d-qty').value.trim()) {
+          e.preventDefault(); formError.textContent = 'Please enter the amount or servings.'; return;
+        }
+        if (!/^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[0-2])\/(19|20)\d{2}$/.test(date.value)) {
+          e.preventDefault(); formError.textContent = 'Please enter a valid date in DD/MM/YYYY.'; return;
+        }
+
+        // TODO: hook to backend. For now, redirect to Thank You.
+        e.preventDefault();
+        window.location.href = 'thankyou.html';
+      });
+    })();
+  </script>
+</footer>
+
+<noscript>
+  <p style="padding:1rem" class="error">JavaScript is required for the Donate form.</p>
+</noscript>
+
+</body>
+</html>
